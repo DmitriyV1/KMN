@@ -3,7 +3,6 @@ const getWinner = (active: string | null, activeOpponent: string | null) => {
   const lose = window.localStorage.getItem("lose") || 0;
   const draw = window.localStorage.getItem("draw") || 0;
 
-  // Таймаут ради отрисовки выбора противника. Ну и как это нормально реализовать я не придумал
   console.log(active, activeOpponent);
   if (activeOpponent === null) return;
   if (active === activeOpponent) {

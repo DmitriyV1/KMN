@@ -11,9 +11,20 @@ function Elements({
 }: {
   active: string | null;
   activeOpponent: string | null;
-  setActive: React.Dispatch<React.SetStateAction<string | null>>;
+  setActive: (value: string) => void;
+  // use enum
   elements: string[];
 }) {
+  // swtich-case
+  const getImg = (element: string) => (
+      element === "rock"
+      ? Rock
+      : element === "scissors"
+          ? Scissors
+          : element === "paper"
+              ? Paper
+              : "")
+
   return (
     <div className="container">
       {elements.map((element, index) => (
@@ -22,15 +33,8 @@ function Elements({
           {...(activeOpponent === element && {
             style: { outline: "5px solid green" },
           })}
-          // Лучше ничего не придумал...
           src={
-            element === "rock"
-              ? Rock
-              : element === "scissors"
-              ? Scissors
-              : element === "paper"
-              ? Paper
-              : ""
+            getImg(element)
           }
           width={100}
           onClick={() => setActive(element)}

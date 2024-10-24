@@ -4,14 +4,20 @@ import getWinner from "./functions/getWinner";
 import "./App.css";
 
 function App() {
+    // custom hook
   const win = window.localStorage.getItem("win") || 0;
   const lose = window.localStorage.getItem("lose") || 0;
   const draw = window.localStorage.getItem("draw") || 0;
 
+  // use enum
   const options = ["rock", "scissors", "paper"];
 
   const [active, setActive] = useState<string | null>(null);
   const [activeOpponent, setActiveOpponent] = useState<string | null>(null);
+
+  const handleActive = (element: string) => {
+    setActive(element);
+  };
 
   const handlePlay = () => {
     if (!active) return;
@@ -39,7 +45,7 @@ function App() {
       <Elements
         active={active}
         activeOpponent={activeOpponent}
-        setActive={setActive}
+        setActive={handleActive}
         elements={options}
       />
       <button onClick={handlePlay}>Play!</button>
