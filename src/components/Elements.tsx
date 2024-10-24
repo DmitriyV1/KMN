@@ -7,43 +7,36 @@ function Elements({
   active,
   setActive,
   activeOpponent,
+  elements,
 }: {
   active: string | null;
   activeOpponent: string | null;
   setActive: React.Dispatch<React.SetStateAction<string | null>>;
+  elements: string[];
 }) {
   return (
     <div className="container">
-      <img
-        // Я вот этим вообще не горжусь
-        {...(active === "rock" ? { style: { outline: "5px solid red" } } : "")}
-        {...(activeOpponent === "rock"
-          ? { style: { outline: "5px solid green" } }
-          : "")}
-        src={Rock}
-        width={100}
-        onClick={() => setActive("rock")}
-      />
-      <img
-        {...(active === "scissors"
-          ? { style: { outline: "5px solid red" } }
-          : "")}
-        {...(activeOpponent === "scissors"
-          ? { style: { outline: "5px solid green" } }
-          : "")}
-        src={Scissors}
-        width={100}
-        onClick={() => setActive("scissors")}
-      />
-      <img
-        {...(active === "paper" ? { style: { outline: "5px solid red" } } : "")}
-        {...(activeOpponent === "paper"
-          ? { style: { outline: "5px solid green" } }
-          : "")}
-        src={Paper}
-        width={100}
-        onClick={() => setActive("paper")}
-      />
+      {elements.map((element, index) => (
+        <img
+          {...(active === element && { style: { outline: "5px solid red" } })}
+          {...(activeOpponent === element && {
+            style: { outline: "5px solid green" },
+          })}
+          // Лучше ничего не придумал...
+          src={
+            element === "rock"
+              ? Rock
+              : element === "scissors"
+              ? Scissors
+              : element === "paper"
+              ? Paper
+              : ""
+          }
+          width={100}
+          onClick={() => setActive(element)}
+          key={index}
+        />
+      ))}
     </div>
   );
 }

@@ -1,42 +1,38 @@
 import { useState } from "react";
-import "./App.css";
 import Elements from "./components/Elements";
+import getWinner from "./functions/getWinner";
+import "./App.css";
 
 function App() {
-  const getWinner = (active: string | null, activeOpponent: string | null) => {
-    // Вот этим тоже не горжусь
-    if (active === "scissors" && activeOpponent === "paper") {
-      alert("win");
-    } else if (active === "rock" && activeOpponent === "scissors") {
-      alert("win");
-    } else if (active === "paper" && activeOpponent === "rock") {
-      alert("win");
-    } else {
-      alert("lose");
-    }
-  };
+  const win = window.localStorage.getItem("win") || 0;
+  const lose = window.localStorage.getItem("lose") || 0;
+  const draw = window.localStorage.getItem("draw") || 0;
+
+  const options = ["rock", "scissors", "paper"];
+
+  const [active, setActive] = useState<string | null>(null);
+  const [activeOpponent, setActiveOpponent] = useState<string | null>(null);
+
   const handlePlay = () => {
-    if (active === null || active === "") return;
-    let options = ["rock", "scissors", "paper"];
-    // Убираем выбранный элемент
-    options = options.filter((el) => el !== active);
-    // Рандомим противника
-    if (Math.random() < 0.5) {
+    if (!active) return;
+    const randomNumber = Math.random();
+
+    if (randomNumber < 0.33) {
       setActiveOpponent(options[0]);
-    } else {
+    } else if (randomNumber > 0.66) {
       setActiveOpponent(options[1]);
+    } else {
+      setActiveOpponent(options[2]);
     }
-    setTimeout(() => {
-      getWinner(active, activeOpponent);
-    }, 200);
+
+    getWinner(active, activeOpponent);
   };
 
   const handleReset = () => {
     setActiveOpponent(null);
     setActive(null);
   };
-  const [active, setActive] = useState<string | null>(null);
-  const [activeOpponent, setActiveOpponent] = useState<string | null>(null);
+
   return (
     <>
       <h1>Камень / ножницы / бумага</h1>
@@ -44,9 +40,16 @@ function App() {
         active={active}
         activeOpponent={activeOpponent}
         setActive={setActive}
+        elements={options}
       />
       <button onClick={handlePlay}>Play!</button>
       <button onClick={handleReset}>Reset</button>
+
+      <div className="score-container">
+        <h3>Win: {win}</h3>
+        <h3>Lose: {lose}</h3>
+        <h3>Draw: {draw}</h3>
+      </div>
     </>
   );
 }
