@@ -1,40 +1,43 @@
 import Scissors from "../svg/scissors-svgrepo-com.svg";
 import Rock from "../svg/rock-svgrepo-com.svg";
 import Paper from "../svg/paper-svgrepo-com.svg";
+import { EOption } from "../consts";
+import ElementSvg from "./ElementSvg";
 import "./index.css";
 
 function Elements({
   active,
   setActive,
   activeOpponent,
-  elements,
 }: {
   active: string | null;
   activeOpponent: string | null;
-  setActive: React.Dispatch<React.SetStateAction<string | null>>;
-  elements: string[];
+  setActive: (value: string) => void;
 }) {
+  const elements = Object.values(EOption);
+  function getSvgPath(element: string) {
+    switch (element) {
+      case "rock":
+        return Rock;
+      case "scissors":
+        return Scissors;
+      case "paper":
+        return Paper;
+      default:
+        return "";
+    }
+  }
+
   return (
     <div className="container">
       {elements.map((element, index) => (
-        <img
-          {...(active === element && { style: { outline: "5px solid red" } })}
-          {...(activeOpponent === element && {
-            style: { outline: "5px solid green" },
-          })}
-          // Лучше ничего не придумал...
-          src={
-            element === "rock"
-              ? Rock
-              : element === "scissors"
-              ? Scissors
-              : element === "paper"
-              ? Paper
-              : ""
-          }
-          width={100}
-          onClick={() => setActive(element)}
+        <ElementSvg
           key={index}
+          element={element}
+          active={active}
+          activeOpponent={activeOpponent}
+          setActive={setActive}
+          svgPath={getSvgPath(element)}
         />
       ))}
     </div>

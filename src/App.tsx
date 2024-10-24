@@ -1,37 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Elements from "./components/Elements";
 import getWinner from "./functions/getWinner";
+import getRandomElement from "./functions/getRandomElement";
+import {
+  clearStorageValues,
+  getStorageValues,
+} from "./functions/useLocalStorage";
 import "./App.css";
 
 function App() {
-  const win = window.localStorage.getItem("win") || 0;
-  const lose = window.localStorage.getItem("lose") || 0;
-  const draw = window.localStorage.getItem("draw") || 0;
-
-  const options = ["rock", "scissors", "paper"];
-
+  const { win, lose, draw } = getStorageValues();
   const [active, setActive] = useState<string | null>(null);
   const [activeOpponent, setActiveOpponent] = useState<string | null>(null);
 
+  const handleActive = (element: string) => {
+    setActive(element);
+  };
+
   const handlePlay = () => {
     if (!active) return;
-    const randomNumber = Math.random();
-
-    if (randomNumber < 0.33) {
-      setActiveOpponent(options[0]);
-    } else if (randomNumber > 0.66) {
-      setActiveOpponent(options[1]);
-    } else {
-      setActiveOpponent(options[2]);
-    }
-
-    getWinner(active, activeOpponent);
+    setActiveOpponent(getRandomElement);
   };
 
   const handleReset = () => {
+    clearStorageValues();
     setActiveOpponent(null);
     setActive(null);
   };
+
+  useEffect(() => {
+    if (activeOpponent !== null && active !== null) {
+      getWinner(active, activeOpponent);
+    }
+  });
 
   return (
     <>
@@ -39,12 +40,10 @@ function App() {
       <Elements
         active={active}
         activeOpponent={activeOpponent}
-        setActive={setActive}
-        elements={options}
+        setActive={handleActive}
       />
       <button onClick={handlePlay}>Play!</button>
       <button onClick={handleReset}>Reset</button>
-
       <div className="score-container">
         <h3>Win: {win}</h3>
         <h3>Lose: {lose}</h3>

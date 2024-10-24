@@ -1,28 +1,27 @@
-const getWinner = (active: string | null, activeOpponent: string | null) => {
-  const win = window.localStorage.getItem("win") || 0;
-  const lose = window.localStorage.getItem("lose") || 0;
-  const draw = window.localStorage.getItem("draw") || 0;
+import { increaseStorageValue } from "./useLocalStorage";
 
-  // Таймаут ради отрисовки выбора противника. Ну и как это нормально реализовать я не придумал
-  console.log(active, activeOpponent);
-  if (activeOpponent === null) return;
+const getWinner = (active: string, activeOpponent: string) => {
+  const winningCombinations = {
+    scissors: "paper",
+    rock: "scissors",
+    paper: "rock",
+  };
+
   if (active === activeOpponent) {
-    window.localStorage.setItem("draw", `${+draw + 1}`);
     alert("draw");
+    increaseStorageValue("draw");
+    return;
   }
 
-  if (active === "scissors" && activeOpponent === "paper") {
+  if (
+    winningCombinations[active as keyof typeof winningCombinations] ===
+    activeOpponent
+  ) {
     alert("win");
-    window.localStorage.setItem("win", `${+win + 1}`);
-  } else if (active === "rock" && activeOpponent === "scissors") {
-    alert("win");
-    window.localStorage.setItem("win", `${+win + 1}`);
-  } else if (active === "paper" && activeOpponent === "rock") {
-    alert("win");
-    window.localStorage.setItem("win", `${+win + 1}`);
+    increaseStorageValue("win");
   } else {
     alert("lose");
-    window.localStorage.setItem("lose", `${+lose + 1}`);
+    increaseStorageValue("lose");
   }
 };
 
