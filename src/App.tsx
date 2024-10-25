@@ -2,18 +2,13 @@ import { useEffect, useState } from "react";
 import Elements from "./components/Elements";
 import getWinner from "./functions/getWinner";
 import getRandomElement from "./functions/getRandomElement";
-import {
-  resetStorageValues,
-  getStorageValues,
-} from "./functions/useLocalStorage";
+import useLocalStorage from "./functions/useLocalStorage";
 import "./App.css";
 
 function App() {
-  // const { win, lose, draw } = getStorageValues();
-
-  const [win, setWin] = useState(getStorageValues().win);
-  const [lose, setLose] = useState(getStorageValues().lose);
-  const [draw, setDraw] = useState(getStorageValues().draw);
+  const [win, setWin] = useLocalStorage("win", 0);
+  const [lose, setLose] = useLocalStorage("lose", 0);
+  const [draw, setDraw] = useLocalStorage("draw", 0);
 
   const [active, setActive] = useState<string | null>(null);
   const [activeOpponent, setActiveOpponent] = useState<string | null>(null);
@@ -28,8 +23,6 @@ function App() {
   };
 
   const handleReset = () => {
-    console.log(win, lose, draw);
-    resetStorageValues();
     setWin(0);
     setLose(0);
     setDraw(0);
@@ -39,23 +32,23 @@ function App() {
 
   useEffect(() => {
     if (activeOpponent !== null && active !== null) {
-      getWinner(active, activeOpponent);
+      const result = getWinner(active, activeOpponent);
+
+      if (result === 0) {
+        setDraw((prev: number) => prev + 1);
+        alert("Draw");
+      } else if (result === 1) {
+        setWin((prev: number) => prev + 1);
+        alert("Win");
+      } else {
+        setLose((prev: number) => prev + 1);
+        alert("Lose");
+      }
     }
-  }, [active, activeOpponent]);
-
-  useEffect(() => {
-    const updateState = () => {
-      const storageValues = getStorageValues();
-      setWin(storageValues.win);
-      setLose(storageValues.lose);
-      setDraw(storageValues.draw);
-    };
-
-    updateState();
-  });
+  }, [active, activeOpponent, setDraw, setLose, setWin]);
 
   return (
-    <>
+    <div>
       <h1>Камень / ножницы / бумага</h1>
       <Elements
         active={active}
@@ -69,7 +62,7 @@ function App() {
         <h3>Lose: {lose}</h3>
         <h3>Draw: {draw}</h3>
       </div>
-    </>
+    </div>
   );
 }
 

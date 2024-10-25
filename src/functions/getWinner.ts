@@ -1,28 +1,31 @@
-import { increaseStorageValue } from "./useLocalStorage";
+type GameRules = {
+  [key: string]: {
+    [key: string]: number;
+  };
+};
 
 const getWinner = (active: string, activeOpponent: string) => {
-  const winningCombinations = {
-    scissors: "paper",
-    rock: "scissors",
-    paper: "rock",
+  const gameRules: GameRules = {
+    rock: {
+      rock: 0,
+      scissors: 1,
+      paper: -1,
+    },
+    ножницы: {
+      rock: -1,
+      scissors: 0,
+      paper: 1,
+    },
+    бумага: {
+      rock: 1,
+      scissors: -1,
+      paper: 0,
+    },
   };
 
-  if (active === activeOpponent) {
-    alert("draw");
-    increaseStorageValue("draw");
-    return;
-  }
+  const result = gameRules[active][activeOpponent];
 
-  if (
-    winningCombinations[active as keyof typeof winningCombinations] ===
-    activeOpponent
-  ) {
-    alert("win");
-    increaseStorageValue("win");
-  } else {
-    alert("lose");
-    increaseStorageValue("lose");
-  }
+  return result;
 };
 
 export default getWinner;
