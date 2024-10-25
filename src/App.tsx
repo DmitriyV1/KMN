@@ -54,17 +54,6 @@ function App() {
     updateState();
   });
 
-  // useEffect(() => {
-  //   const updateState = () => {
-  //     const { win, lose, draw } = getStorageValues();
-  //     setStateWin(win);
-  //     setStateLose(lose);
-  //     setStateDraw(draw);
-  //   };
-
-  //   updateState();
-  // }, [draw, lose, win]);
-
   return (
     <>
       <h1>Камень / ножницы / бумага</h1>
