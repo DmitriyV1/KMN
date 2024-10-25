@@ -3,13 +3,18 @@ import Elements from "./components/Elements";
 import getWinner from "./functions/getWinner";
 import getRandomElement from "./functions/getRandomElement";
 import {
-  clearStorageValues,
+  resetStorageValues,
   getStorageValues,
 } from "./functions/useLocalStorage";
 import "./App.css";
 
 function App() {
-  const { win, lose, draw } = getStorageValues();
+  // const { win, lose, draw } = getStorageValues();
+
+  const [win, setWin] = useState(getStorageValues().win);
+  const [lose, setLose] = useState(getStorageValues().lose);
+  const [draw, setDraw] = useState(getStorageValues().draw);
+
   const [active, setActive] = useState<string | null>(null);
   const [activeOpponent, setActiveOpponent] = useState<string | null>(null);
 
@@ -23,7 +28,11 @@ function App() {
   };
 
   const handleReset = () => {
-    clearStorageValues();
+    console.log(win, lose, draw);
+    resetStorageValues();
+    setWin(0);
+    setLose(0);
+    setDraw(0);
     setActiveOpponent(null);
     setActive(null);
   };
@@ -32,7 +41,29 @@ function App() {
     if (activeOpponent !== null && active !== null) {
       getWinner(active, activeOpponent);
     }
+  }, [active, activeOpponent]);
+
+  useEffect(() => {
+    const updateState = () => {
+      const storageValues = getStorageValues();
+      setWin(storageValues.win);
+      setLose(storageValues.lose);
+      setDraw(storageValues.draw);
+    };
+
+    updateState();
   });
+
+  // useEffect(() => {
+  //   const updateState = () => {
+  //     const { win, lose, draw } = getStorageValues();
+  //     setStateWin(win);
+  //     setStateLose(lose);
+  //     setStateDraw(draw);
+  //   };
+
+  //   updateState();
+  // }, [draw, lose, win]);
 
   return (
     <>

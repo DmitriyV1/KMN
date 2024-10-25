@@ -6,28 +6,15 @@ const getStorageValues = () => {
   return { win, lose, draw };
 };
 
-const clearStorageValues = () => {
+const resetStorageValues = () => {
   window.localStorage.setItem("win", String(0));
   window.localStorage.setItem("lose", String(0));
   window.localStorage.setItem("draw", String(0));
 };
 
 const increaseStorageValue = (value: string) => {
-  const { win, lose, draw } = getStorageValues();
-
-  switch (value) {
-    case "win":
-      window.localStorage.setItem("win", String(+win + 1));
-      break;
-    case "lose":
-      window.localStorage.setItem("lose", String(+lose + 1));
-      break;
-    case "draw":
-      window.localStorage.setItem("draw", String(+draw + 1));
-      break;
-    default:
-      break;
-  }
+  const storedValue = window.localStorage.getItem(value);
+  window.localStorage.setItem(value, String(+storedValue! + 1));
 };
 
-export { getStorageValues, clearStorageValues, increaseStorageValue };
+export { getStorageValues, resetStorageValues, increaseStorageValue };
