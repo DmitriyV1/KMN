@@ -3,12 +3,11 @@ import Elements from "./components/Elements";
 import getWinner from "./functions/getWinner";
 import getRandomElement from "./functions/getRandomElement";
 import useLocalStorage from "./functions/useLocalStorage";
-import "./App.css";
+import Scores from "./components/Scores";
 
 function App() {
-  const [win, setWin] = useLocalStorage("win", 0);
-  const [lose, setLose] = useLocalStorage("lose", 0);
-  const [draw, setDraw] = useLocalStorage("draw", 0);
+  const { wins, losses, draws, addWin, addLoss, addDraw, resetStatistics } =
+    useLocalStorage();
 
   const [active, setActive] = useState<string | null>(null);
   const [activeOpponent, setActiveOpponent] = useState<string | null>(null);
@@ -23,45 +22,51 @@ function App() {
   };
 
   const handleReset = () => {
-    setWin(0);
-    setLose(0);
-    setDraw(0);
+    resetStatistics();
     setActiveOpponent(null);
     setActive(null);
   };
 
   useEffect(() => {
-    if (activeOpponent !== null && active !== null) {
-      const result = getWinner(active, activeOpponent);
+    if (active === null || activeOpponent === null) return;
 
-      if (result === 0) {
-        setDraw((prev: number) => prev + 1);
+    const result = getWinner(active, activeOpponent);
+
+    switch (result) {
+      case 0:
+        addDraw();
         alert("Draw");
-      } else if (result === 1) {
-        setWin((prev: number) => prev + 1);
+        break;
+      case 1:
+        addWin();
         alert("Win");
-      } else {
-        setLose((prev: number) => prev + 1);
+        break;
+      case -1:
+        addLoss();
+
         alert("Lose");
-      }
+        break;
     }
-  }, [active, activeOpponent, setDraw, setLose, setWin]);
+    // Массив зависимостей просит addDraw etc, но в таком случае мы ловим бесконечный ререндер, т.к. гуард перестает работать после первой итерации (я не сбрасываю active и activeOpponent). Если добавлю сброс оппонента, то он перестанет подсвечиваться, т.к. сразу после результата игры он обнуляется.
+  }, [active, activeOpponent]);
 
   return (
-    <div>
-      <h1>Камень / ножницы / бумага</h1>
+    <div className="body">
+      <h1 className="body__title">Камень / ножницы / бумага</h1>
       <Elements
         active={active}
         activeOpponent={activeOpponent}
         setActive={handleActive}
       />
-      <button onClick={handlePlay}>Play!</button>
-      <button onClick={handleReset}>Reset</button>
-      <div className="score-container">
-        <h3>Win: {win}</h3>
-        <h3>Lose: {lose}</h3>
-        <h3>Draw: {draw}</h3>
+      <div className="body__buttons">
+        <button className="button" onClick={handlePlay}>
+          Play!
+        </button>
+        <button className="button" onClick={handleReset}>
+          Reset
+        </button>
       </div>
+      <Scores wins={wins} losses={losses} draws={draws} />
     </div>
   );
 }

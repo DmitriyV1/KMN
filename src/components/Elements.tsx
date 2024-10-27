@@ -3,7 +3,6 @@ import Rock from "../svg/rock-svgrepo-com.svg";
 import Paper from "../svg/paper-svgrepo-com.svg";
 import { EOption } from "../consts";
 import ElementSvg from "./ElementSvg";
-import "./index.css";
 
 function Elements({
   active,
@@ -29,7 +28,7 @@ function Elements({
   }
 
   return (
-    <div className="container">
+    <div className="elements">
       {elements.map((element, index) => (
         <ElementSvg
           key={index}

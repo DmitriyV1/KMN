@@ -6,27 +6,23 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
-  /* font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; */
 }
 
-body {
-  margin: 0;
+.body {
   display: flex;
-  place-items: cetner;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
-h1 {
+.body__title {
   font-size: 3.2em;
   line-height: 1.1;
 }
 
-button {
+.button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -38,12 +34,37 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
   margin: 30px;
+  align-self: center;
 }
 
-button:hover {
+.button:hover {
   border-color: #646cff;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+.elements {
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+  :hover {
+    cursor: pointer;
+  }
+}
+
+.element {
+  width: 100px;
+}
+
+.element_active {
+  outline: 5px solid red;
+}
+
+.element_active-opponent {
+  outline: 5px solid green;
+}
+
+.score-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 30px;
 }

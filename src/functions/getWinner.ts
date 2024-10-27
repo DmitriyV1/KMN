@@ -1,8 +1,4 @@
-type GameRules = {
-  [key: string]: {
-    [key: string]: number;
-  };
-};
+type GameRules = Record<string, Record<string, number>>;
 
 const getWinner = (active: string, activeOpponent: string) => {
   const gameRules: GameRules = {
@@ -11,21 +7,19 @@ const getWinner = (active: string, activeOpponent: string) => {
       scissors: 1,
       paper: -1,
     },
-    ножницы: {
+    scissors: {
       rock: -1,
       scissors: 0,
       paper: 1,
     },
-    бумага: {
+    paper: {
       rock: 1,
       scissors: -1,
       paper: 0,
     },
   };
 
-  const result = gameRules[active][activeOpponent];
-
-  return result;
+  return gameRules[active][activeOpponent];
 };
 
 export default getWinner;

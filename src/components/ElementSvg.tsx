@@ -1,4 +1,4 @@
-type Props = {
+type TProps = {
   active: string | null;
   activeOpponent: string | null;
   setActive: (value: string) => void;
@@ -12,15 +12,13 @@ function ElementSvg({
   setActive,
   element,
   svgPath,
-}: Props) {
+}: TProps) {
   return (
     <img
-      {...(active === element && { style: { outline: "5px solid red" } })}
-      {...(activeOpponent === element && {
-        style: { outline: "5px solid green" },
-      })}
+      className={`element element_${active === element ? "active" : ""}${
+        activeOpponent === element ? "active-opponent" : ""
+      }`}
       src={svgPath}
-      width={100}
       onClick={() => setActive(element)}
     />
   );
